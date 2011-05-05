@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>index</title>
+	<meta name="generator" content="TextMate http://macromates.com/">
+	<meta name="author" content="LV426">
+	<script type="text/javascript" src="../jquery-1.6.js"></script>
+	<script type="text/javascript" src="jquery.in_place_editing.js"></script>
+	<script>
+	  $(document).ready(function() {
+		  // using an image of a leaf as the handle to activate editing
+	      $(".editable_with_handle").in_place_editing({handleImage:"leaf.png"});
+	      $(".editable_no_handle").in_place_editing();
+	  });
+	</script>
+</head>
+<body>
+	<p class='editable_with_handle'>Hello!</p>
+	<p class='editable_no_handle'>Something Else</p>
+</body>
+</html>
