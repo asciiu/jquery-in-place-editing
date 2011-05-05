@@ -3,14 +3,11 @@ jQuery.fn.in_place_editing = function(options) {
 	var settings = {
 		handleImage: "sample.png",
 		handleWidth: "15px",
-		handleHeight: "15px",
+		handleHeight: "15px"
 	};
 	
 	// extend the settings with options
 	jQuery.extend(settings,options);
-	
-	var originalText;
-	var editing = false;
 	
 	// wrap the inner 
 	$(this).wrapInner('<span class="editable_content" />').prepend('<img style="width:15px;height:15px;position:relative;top:-4;padding-left:7px;opacity:1" src='+settings.handleImage+' class="editable_handle">');
@@ -18,61 +15,43 @@ jQuery.fn.in_place_editing = function(options) {
 	// on click handler
 	$("img.editable_handle").click(function() {
 		// the next sibling will be the span that wraps the editable text
-		var editableText = this.nextSibling;
+		var $editableElement = $(this.nextSibling);
 		
-		editing = !editing;
+		// keep track of object state
+		$editableElement.data('editing',true);
+		$editableElement.data('text',$editableElement.html());		    
 		
-		if(editing == true) {
-			editableText.setAttribute("contentEditable",true);
-		    editableText.focus();
-		    originalText = editableText.innerHTML;
-		} else {
-		    editableText.blur();	    
-		}
+		$editableElement.prop("contentEditable",true);
+		$editableElement.focus();
 	});
 	
 	$("span.editable_content").blur(function() {
-		this.setAttribute("contentEditable",false);
+		$this = $(this);
 		
-		// we were editing while the element lost focus
-		if(editing) {
-		  // return content to original
-		  this.innerHTML = originalText;
+		// turn off editing
+		$this.prop("contentEditable",false);
+		
+		// were we editing while the element lost focus
+		if($this.data('editing')) {
+		  // set content text
+		  $this.html($this.data('text'));
 		  // reset editing flag
-		  editing = false;
+		  $this.data('editing',false);
 		} 
 	});
 	
 	$("span.editable_content").keypress(function(event) {
+		// return key code
 		if(event.keyCode == 13) {			
-			// if the value in this field was erased and the text is now blank
+			// these are invalid states for the new value
 			if(this.innerHTML == '' || this.innerHTML == '<br>') {
 				// return the field back to it's original value
 				this.blur();
 				return;
 			}
-			  
-			// exit editing mode
-			editing = false;
 			
-			// keep track of which element is in focus so 
-			// we can change the inner html later 
-			var element = this;
-			
-			// things you'll need:
-			// 1. value = this is the new value
-			// 2. what controller
-			// 3. the id of the object being modified
-			// 4. the attribute that is being modified
-			// perhaps these can be set as the id from within rails?
-			$.post(this.parentNode.id, {value:element.innerHTML}, function(data) {				
-				if(data.search("Error") != -1) {
-				  // display the error
-				  eval(data);
-				  // restore original text value
-				  element.innerHTML = originalText;
-				}
-			});
+			// set new value of text
+			$(this).data('text',this.innerHTML);
 
 			this.blur();   
 		}
