@@ -1,0 +1,28 @@
+JqueryInPlaceEditing
+====================
+
+JQuery style in place editing plugin. This plugin was last tested with jquery-1.6.
+
+
+How to use
+=======
+Step 1: Include the following javascript tags.
+
+<script type="text/javascript" src="jquery-1.6.js"></script>
+<script type="text/javascript" src="jquery.in_place_editing.js"></script>
+
+Step 2: Use it!
+
+$(document).ready(function() {
+    // without a handle
+    $(".editable1").in_place_editing();
+
+    // with a handle
+    $(".editable2").in_place_editing({handleImage:"leaf.png"})
+});
+
+You should now be able to edit all objects of class 'editable' in place. Enjoy!
+
+	
+
+Copyright (c) 2010 'asciiu' released under the MIT license
